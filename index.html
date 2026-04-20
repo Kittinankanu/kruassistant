@@ -36,12 +36,7 @@
             max-width: 420px;
             width: 90%;
         }
-        .logo-img {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            margin-bottom: 16px;
-        }
+        .logo-img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 16px; }
         h1 { font-size: 20px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
         .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
         .btn {
@@ -74,13 +69,11 @@
         </div>
     </div>
     <script>
+    const API = "https://script.google.com/macros/s/AKfycbz5CsXD1vW2KQX2Fi-imRxb2nlXiwGKZbRIx7zduIbtioWbO7x7ASd_A1iF0r5e4e-4/exec";
     function teacherLogin() {
         const pw = prompt("กรุณาใส่รหัสผ่านค่ะ");
         if (pw === null) return;
-        fetch("https://script.google.com/macros/s/AKfycbz5CsXD1vW2KQX2Fi-imRxb2nlXiwGKZbRIx7zduIbtioWbO7x7ASd_A1iF0r5e4e-4/exec", {
-            method: "POST",
-            body: JSON.stringify({ action: "login", password: pw })
-        })
+        fetch(API + "?action=login&password=" + encodeURIComponent(pw))
         .then(r => r.json())
         .then(data => {
             if (data.success) {
@@ -90,9 +83,7 @@
                 alert("รหัสผ่านไม่ถูกต้องค่ะ");
             }
         })
-        .catch(() => {
-            alert("เกิดข้อผิดพลาด กรุณาลองใหม่ค่ะ");
-        });
+        .catch(() => alert("เกิดข้อผิดพลาด กรุณาลองใหม่ค่ะ"));
     }
     </script>
 </body>

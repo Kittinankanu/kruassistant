@@ -123,7 +123,7 @@ function closeLogin(){ document.getElementById("loginOverlay").classList.remove(
 
 async function doLogin(){
   const pw = document.getElementById("pwInput").value;
-  const res = await fetch(API, {method:"POST",body:JSON.stringify({action:"login",password:pw})});
+  const res = await fetch(API + "?action=login&password=" + encodeURIComponent(pw));
   const data = await res.json();
   if(data.success){
     isTeacher = true;
@@ -155,7 +155,7 @@ async function loadStatus(){
 async function setStatus(status){
   const pw = prompt("กรุณาใส่รหัสผ่านเพื่อยืนยันค่ะ");
   if(!pw) return;
-  const res = await fetch(API, {method:"POST",body:JSON.stringify({action:"setStatus",round:ROUND,status:status,password:pw})});
+  const res = await fetch(API + "?action=setStatus&round=" + ROUND + "&status=" + encodeURIComponent(status) + "&password=" + encodeURIComponent(pw));
   const data = await res.json();
   if(data.success){ alert("อัปเดตสถานะเป็น '"+status+"' เรียบร้อยแล้วค่ะ"); loadStatus(); }
   else { alert("รหัสผ่านไม่ถูกต้องค่ะ"); }
@@ -163,7 +163,7 @@ async function setStatus(status){
 
 async function toggleCheck(itemId){
   if(isTeacher){ alert("ครูผู้ช่วยไม่สามารถติ๊กประเมินตนเองได้ค่ะ"); return; }
-  const res = await fetch(API, {method:"POST",body:JSON.stringify({action:"toggleCheck",round:ROUND,item_id:itemId})});
+  const res = await fetch(API + "?action=toggleCheck&round=" + ROUND + "&item_id=" + encodeURIComponent(itemId));
   const data = await res.json();
   if(data.success){
     checks[itemId] = data.checked;
@@ -189,7 +189,7 @@ async function saveDoc(itemId){
   const note = document.getElementById("note-"+itemId).value;
   const url = document.getElementById("url-"+itemId).value;
   const domain = document.getElementById("domain-"+itemId).value;
-  await fetch(API, {method:"POST",body:JSON.stringify({action:"saveDocument",round:ROUND,domain:domain,item_id:itemId,item_name:"",drive_url:url,note:note})});
+  await fetch(API + "?action=saveDocument&round=" + ROUND + "&domain=" + encodeURIComponent(domain) + "&item_id=" + encodeURIComponent(itemId) + "&item_name=&drive_url=" + encodeURIComponent(url));
   docs[itemId] = {drive_url:url, note:note};
   renderDocDisplay(itemId);
   alert("บันทึกเรียบร้อยแล้วค่ะ");
