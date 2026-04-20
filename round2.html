@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>การประเมินครั้งที่ 2 - เดือนที่ 7-12</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#6B21A8;--primary-light:#E9D5FF;--primary-soft:#F5F0FA;--text:#1F2937;--muted:#6B7280;--border:#E5E7EB}
+body{font-family:"Sarabun",sans-serif;background:var(--primary-soft);color:var(--text);min-height:100vh}
+.wrap{max-width:920px;margin:0 auto;padding:28px 20px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;background:white;border-radius:14px;padding:16px 20px;border:1px solid var(--border)}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.back-btn{font-size:14px;color:var(--primary);text-decoration:none;font-weight:600}
+.topbar-title{font-size:18px;font-weight:700;color:var(--text)}
+.topbar-sub{font-size:13px;color:var(--muted)}
+.progress-summary{display:flex;gap:16px;align-items:center}
+.prog-num{font-size:22px;font-weight:700;color:var(--primary)}
+.prog-label{font-size:12px;color:var(--muted)}
+.teacher-panel{background:#FEF3C7;border:1px solid #FDE68A;border-radius:14px;padding:16px 20px;margin-bottom:20px;display:none}
+.teacher-panel.show{display:block}
+.teacher-panel-title{font-size:14px;font-weight:600;color:#B45309;margin-bottom:12px}
+.status-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.btn{padding:10px 18px;border-radius:10px;font-size:14px;font-weight:600;font-family:"Sarabun",sans-serif;border:none;cursor:pointer;transition:all 0.15s}
+.btn-ready{background:#F59E0B;color:white}.btn-ready:hover{background:#D97706}
+.btn-cancel-ready{background:#EF4444;color:white}.btn-cancel-ready:hover{background:#DC2626}
+.btn-pass{background:#10B981;color:white}.btn-pass:hover{background:#059669}
+.btn-logout{background:#F3F4F6;color:var(--muted);font-size:13px}.btn-logout:hover{background:#E5E7EB}
+.domain-section{margin-bottom:28px}
+.domain-title{font-size:16px;font-weight:700;color:var(--primary);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--primary-light)}
+.item-card{background:white;border-radius:14px;border:1px solid var(--border);padding:18px;margin-bottom:12px;transition:all 0.15s}
+.item-card.checked{border-color:#10B981;background:#F0FDF4}
+.item-header{display:flex;align-items:flex-start;gap:14px}
+.item-num{font-size:12px;font-weight:600;color:var(--primary);background:var(--primary-soft);border:1px solid var(--primary-light);padding:3px 8px;border-radius:8px;flex-shrink:0;margin-top:2px}
+.item-body{flex:1}
+.item-name{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.item-note{font-size:13px;color:var(--muted);margin-bottom:10px;font-style:italic}
+.item-docs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.doc-link{font-size:13px;color:var(--primary);background:var(--primary-soft);border:1px solid var(--primary-light);padding:4px 12px;border-radius:20px;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.doc-link:hover{background:var(--primary-light)}
+.no-doc{font-size:13px;color:#D1D5DB;font-style:italic}
+.check-area{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.check-btn{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:10px;font-size:14px;font-weight:600;font-family:"Sarabun",sans-serif;border:1.5px solid var(--border);background:white;cursor:pointer;transition:all 0.15s;color:var(--muted)}
+.check-btn.active{background:#ECFDF5;border-color:#10B981;color:#047857}
+.check-btn:hover{border-color:#C4B5FD}
+.check-icon{width:20px;height:20px;border-radius:50%;border:2px solid #D1D5DB;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all 0.15s}
+.check-btn.active .check-icon{background:#10B981;border-color:#10B981;color:white}
+.teacher-doc-area{margin-top:10px;padding:12px;background:#FFFBEB;border-radius:10px;border:1px solid #FDE68A;display:none}
+.teacher-doc-area.show{display:block}
+.doc-input{width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--border);font-family:"Sarabun",sans-serif;font-size:14px;margin-bottom:8px}
+.doc-input:focus{outline:none;border-color:var(--primary)}
+.doc-actions{display:flex;gap:8px}
+.btn-save{background:var(--primary);color:white;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;font-family:"Sarabun",sans-serif;border:none;cursor:pointer}
+.btn-save:hover{background:#581C87}
+.login-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:100;display:none}
+.login-overlay.show{display:flex}
+.login-card{background:white;border-radius:16px;padding:32px;width:320px;text-align:center}
+.login-title{font-size:18px;font-weight:700;margin-bottom:6px}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.login-input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);font-family:"Sarabun",sans-serif;font-size:15px;margin-bottom:12px;text-align:center;letter-spacing:2px}
+.login-input:focus{outline:none;border-color:var(--primary)}
+.login-btn{width:100%;padding:12px;border-radius:10px;background:var(--primary);color:white;font-size:15px;font-weight:600;font-family:"Sarabun",sans-serif;border:none;cursor:pointer}
+.login-btn:hover{background:#581C87}
+.login-err{font-size:13px;color:#EF4444;margin-top:8px;display:none}
+.loading{text-align:center;padding:40px;color:var(--muted);font-size:15px}
+</style>
+</head>
+<body>
+
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-title">เข้าสู่ระบบครูผู้ช่วย</div>
+    <div class="login-sub">กรุณาใส่รหัสผ่านเพื่อเข้าสู่โหมดแก้ไขค่ะ</div>
+    <input class="login-input" type="password" id="pwInput" placeholder="รหัสผ่าน">
+    <button class="login-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
+    <div class="login-err" id="loginErr">รหัสผ่านไม่ถูกต้องค่ะ</div>
+    <br><br>
+    <button onclick="closeLogin()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-family:Sarabun,sans-serif;font-size:13px">ยกเลิก</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="topbar-left">
+      <a href="dashboard.html" class="back-btn">← กลับ</a>
+      <div>
+        <div class="topbar-title">การประเมินครั้งที่ 2</div>
+        <div class="topbar-sub">เดือนที่ 7-12</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="progress-summary">
+        <div><div class="prog-num" id="totalChecked">-</div><div class="prog-label">รายการที่ติ๊กแล้ว</div></div>
+      </div>
+      <button class="btn btn-logout" id="teacherLoginBtn" onclick="showLogin()">เข้าสู่ระบบครูผู้ช่วย</button>
+      <button class="btn btn-logout" id="teacherLogoutBtn" onclick="doLogout()" style="display:none">ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <div class="teacher-panel" id="teacherPanel">
+    <div class="teacher-panel-title">โหมดครูผู้ช่วย - จัดการสถานะการประเมิน</div>
+    <div class="status-btns">
+      <button class="btn btn-ready" onclick="setStatus('พร้อมประเมิน')">🟡 ตั้งสถานะ: พร้อมประเมิน</button>
+      <button class="btn btn-cancel-ready" onclick="setStatus('ยังไม่พร้อม')">🔴 ยกเลิกสถานะพร้อมประเมิน</button>
+      <button class="btn btn-pass" onclick="setStatus('ผ่าน')">🟢 ตั้งสถานะ: ผ่าน</button>
+    </div>
+    <div style="font-size:13px;color:#B45309">สถานะปัจจุบัน: <strong id="currentStatus">กำลังโหลด...</strong></div>
+  </div>
+
+  <div id="itemsContainer"><div class="loading">กำลังโหลดข้อมูล...</div></div>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbz5CsXD1vW2KQX2Fi-imRxb2nlXiwGKZbRIx7zduIbtioWbO7x7ASd_A1iF0r5e4e-4/exec";
+const ROUND = 2;
+const DOMAINS = [{"name": "ด้านวิชาชีพ", "items": [{"id": "2-v-1", "name": "การวิเคราะห์หลักสูตร มาตรฐานการเรียนรู้และตัวชี้วัด"}, {"id": "2-v-2", "name": "การจัดทำรายวิชาหรือคำอธิบายรายวิชา"}, {"id": "2-v-3", "name": "การมีหน่วยการเรียนรู้โดยครอบคลุมเนื้อหาหลักสูตร"}, {"id": "2-v-4", "name": "การออกแบบหน่วยการเรียนรู้ให้สอดคล้องกับรายวิชา"}, {"id": "2-v-5", "name": "การมีหน่วยการเรียนรู้สอดคล้องกับผู้เรียน"}, {"id": "2-v-6", "name": "การมีผลการวิเคราะห์ผู้เรียนเป็นรายบุคคล"}, {"id": "2-v-7", "name": "การจัดการเรียนรู้โดยใช้รูปแบบ Active Learning"}, {"id": "2-v-8", "name": "การจัดการเรียนรู้สอดคล้องกับมาตรฐานการเรียนรู้"}, {"id": "2-v-9", "name": "การเลือกและใช้สื่อเทคโนโลยีสอดคล้องกับกิจกรรมการเรียนรู้"}, {"id": "2-v-10", "name": "การวัดและประเมินผลการเรียนรู้หลากหลายวิธี"}, {"id": "2-v-11", "name": "การจัดบรรยากาศที่ส่งเสริมการพัฒนาผู้เรียน"}, {"id": "2-v-12", "name": "การส่งเสริมการเรียนรู้โดยใช้เทคโนโลยีดิจิทัล"}, {"id": "2-v-13", "name": "การจัดทำข้อมูลสารสนเทศของผู้เรียนและรายวิชา"}, {"id": "2-v-14", "name": "การดำเนินการตามระบบดูแลช่วยเหลือผู้เรียน"}, {"id": "2-v-15", "name": "การเรียนรู้ด้านกฎหมายระเบียบที่เกี่ยวข้อง"}]}, {"name": "ด้านคุณลักษณะส่วนบุคคล", "items": [{"id": "2-c-1", "name": "การมีวินัยในตนเอง ยอมรับและถือปฏิบัติตามกฎ กติกา"}, {"id": "2-c-2", "name": "การตรงต่อเวลา"}, {"id": "2-c-3", "name": "การอุทิศเวลาให้แก่ทางราชการและผู้เรียน"}, {"id": "2-c-4", "name": "การเอาใจใส่ช่วยเหลือผู้เรียนและผู้รับบริการ"}, {"id": "2-c-5", "name": "การรักษาความสามัคคี มีน้ำใจเอื้อเฟื้อเผื่อแผ่"}, {"id": "2-c-6", "name": "การให้การช่วยเหลือ และให้ความร่วมมือแก่ส่วนรวม"}, {"id": "2-c-7", "name": "การมีส่วนร่วมอนุรักษ์วัฒนธรรมไทยและสิ่งแวดล้อม อย่างน้อย 2 กิจกรรม"}, {"id": "2-c-8", "name": "การดำรงชีวิตตามหลักปรัชญาของเศรษฐกิจพอเพียง"}, {"id": "2-c-9", "name": "การประพฤติตนเป็นแบบอย่างที่ดีให้กับผู้เรียน"}, {"id": "2-c-10", "name": "การรักษาชื่อเสียง ปกป้องศักดิ์ศรีแห่งวิชาชีพ จนได้รับการยกย่อง อย่างน้อย 1 รายการ"}, {"id": "2-c-11", "name": "มีพฤติกรรมที่แสดงถึงการเป็นผู้ละเว้นอบายมุขและสิ่งเสพติด"}]}];
+let isTeacher = false;
+let checks = {};
+let docs = {};
+
+function showLogin(){ document.getElementById("loginOverlay").classList.add("show"); document.getElementById("pwInput").focus(); }
+function closeLogin(){ document.getElementById("loginOverlay").classList.remove("show"); document.getElementById("pwInput").value=""; document.getElementById("loginErr").style.display="none"; }
+
+async function doLogin(){
+  const pw = document.getElementById("pwInput").value;
+  const res = await fetch(API, {method:"POST",body:JSON.stringify({action:"login",password:pw})});
+  const data = await res.json();
+  if(data.success){
+    isTeacher = true;
+    closeLogin();
+    document.getElementById("teacherPanel").classList.add("show");
+    document.getElementById("teacherLoginBtn").style.display="none";
+    document.getElementById("teacherLogoutBtn").style.display="";
+    document.querySelectorAll(".teacher-doc-area").forEach(el=>el.classList.add("show"));
+    loadStatus();
+  } else {
+    document.getElementById("loginErr").style.display="block";
+  }
+}
+
+function doLogout(){
+  isTeacher = false;
+  document.getElementById("teacherPanel").classList.remove("show");
+  document.getElementById("teacherLoginBtn").style.display="";
+  document.getElementById("teacherLogoutBtn").style.display="none";
+  document.querySelectorAll(".teacher-doc-area").forEach(el=>el.classList.remove("show"));
+}
+
+async function loadStatus(){
+  const config = await fetch(API+"?action=getConfig").then(r=>r.json());
+  const status = config["round"+ROUND+"_status"] || "ยังไม่พร้อม";
+  document.getElementById("currentStatus").textContent = status;
+}
+
+async function setStatus(status){
+  const pw = prompt("กรุณาใส่รหัสผ่านเพื่อยืนยันค่ะ");
+  if(!pw) return;
+  const res = await fetch(API, {method:"POST",body:JSON.stringify({action:"setStatus",round:ROUND,status:status,password:pw})});
+  const data = await res.json();
+  if(data.success){ alert("อัปเดตสถานะเป็น '"+status+"' เรียบร้อยแล้วค่ะ"); loadStatus(); }
+  else { alert("รหัสผ่านไม่ถูกต้องค่ะ"); }
+}
+
+async function toggleCheck(itemId){
+  if(isTeacher){ alert("ครูผู้ช่วยไม่สามารถติ๊กประเมินตนเองได้ค่ะ"); return; }
+  const res = await fetch(API, {method:"POST",body:JSON.stringify({action:"toggleCheck",round:ROUND,item_id:itemId})});
+  const data = await res.json();
+  if(data.success){
+    checks[itemId] = data.checked;
+    updateCheckUI(itemId, data.checked);
+    updateTotal();
+  }
+}
+
+function updateCheckUI(itemId, checked){
+  const card = document.getElementById("card-"+itemId);
+  const btn = document.getElementById("chk-"+itemId);
+  if(!card||!btn) return;
+  if(checked){ card.classList.add("checked"); btn.classList.add("active"); btn.innerHTML="<div class=\"check-icon\">✓</div> ติ๊กแล้ว"; }
+  else { card.classList.remove("checked"); btn.classList.remove("active"); btn.innerHTML="<div class=\"check-icon\"></div> ติ๊กผ่าน"; }
+}
+
+function updateTotal(){
+  const total = Object.values(checks).filter(v=>v===true).length;
+  document.getElementById("totalChecked").textContent = total;
+}
+
+async function saveDoc(itemId){
+  const note = document.getElementById("note-"+itemId).value;
+  const url = document.getElementById("url-"+itemId).value;
+  const domain = document.getElementById("domain-"+itemId).value;
+  await fetch(API, {method:"POST",body:JSON.stringify({action:"saveDocument",round:ROUND,domain:domain,item_id:itemId,item_name:"",drive_url:url,note:note})});
+  docs[itemId] = {drive_url:url, note:note};
+  renderDocDisplay(itemId);
+  alert("บันทึกเรียบร้อยแล้วค่ะ");
+}
+
+function renderDocDisplay(itemId){
+  const d = docs[itemId];
+  const el = document.getElementById("docDisplay-"+itemId);
+  if(!el) return;
+  if(d && (d.drive_url||d.note)){
+    let html = "";
+    if(d.note) html += "<div style=\"font-size:13px;color:#6B7280;margin-bottom:6px;\">"+d.note+"</div>";
+    if(d.drive_url) html += "<a href=\""+d.drive_url+"\" target=\"_blank\" class=\"doc-link\">📎 เปิดเอกสาร</a>";
+    el.innerHTML = html;
+  } else {
+    el.innerHTML = "<span class=\"no-doc\">ยังไม่มีเอกสารแนบค่ะ</span>";
+  }
+}
+
+async function loadAll(){
+  const [checkData, docData] = await Promise.all([
+    fetch(API+"?action=getChecklist&round="+ROUND).then(r=>r.json()),
+    fetch(API+"?action=getDocuments&round="+ROUND).then(r=>r.json())
+  ]);
+  checks = checkData || {};
+  if(Array.isArray(docData)) docData.forEach(d=>{ docs[d.item_id] = d; });
+
+  let html = "";
+  DOMAINS.forEach(domain=>{
+    html += "<div class=\"domain-section\"><div class=\"domain-title\">"+domain.name+"</div>";
+    domain.items.forEach((item,idx)=>{
+      const checked = checks[item.id]===true;
+      const d = docs[item.id]||{};
+      html += "<div class=\"item-card"+(checked?" checked":"")+"\" id=\"card-"+item.id+"\"><div class=\"item-header\">";
+      html += "<span class=\"item-num\">"+(idx+1)+"</span>";
+      html += "<div class=\"item-body\">";
+      html += "<div class=\"item-name\">"+item.name+"</div>";
+      html += "<div id=\"docDisplay-"+item.id+"\">";
+      if(d.note) html += "<div style=\"font-size:13px;color:#6B7280;margin-bottom:6px;\">"+d.note+"</div>";
+      if(d.drive_url) html += "<a href=\""+d.drive_url+"\" target=\"_blank\" class=\"doc-link\">📎 เปิดเอกสาร</a>";
+      if(!d.note&&!d.drive_url) html += "<span class=\"no-doc\">ยังไม่มีเอกสารแนบค่ะ</span>";
+      html += "</div>";
+      html += "<div class=\"teacher-doc-area"+(isTeacher?" show":"")+"\" id=\"tdoc-"+item.id+"\">";
+      html += "<input type=\"hidden\" id=\"domain-"+item.id+"\" value=\""+domain.name+"\">";
+      html += "<input class=\"doc-input\" id=\"note-"+item.id+"\" placeholder=\"รายละเอียดสั้นๆ...\" value=\""+(d.note||"")+"\"><br>";
+      html += "<input class=\"doc-input\" id=\"url-"+item.id+"\" placeholder=\"ลิงก์ Google Drive...\" value=\""+(d.drive_url||"")+"\"><br>";
+      html += "<div class=\"doc-actions\"><button class=\"btn-save\" onclick=\"saveDoc(\'"+item.id+"\')\">💾 บันทึก</button></div></div>";
+      html += "<div class=\"check-area\">";
+      html += "<button class=\"check-btn"+(checked?" active":" ")+"\" id=\"chk-"+item.id+"\" onclick=\"toggleCheck(\'"+item.id+"\')\"><div class=\"check-icon\">"+( checked?"✓":"")+"</div> "+(checked?"ติ๊กแล้ว":"ติ๊กผ่าน")+"</button>";
+      html += "</div></div></div></div>";
+    });
+    html += "</div>";
+  });
+
+  document.getElementById("itemsContainer").innerHTML = html;
+  updateTotal();
+}
+
+loadAll();
+setInterval(()=>{ if(!isTeacher) loadAll(); }, 15000);
+</script>
+</body></html>
