@@ -70,8 +70,27 @@
         <p class="subtitle">ระบบติดตามการเตรียมความพร้อมและพัฒนาอย่างเข้ม</p>
         <a href="dashboard.html" class="btn btn-committee">📄 เข้าสู่หน้าการประเมิน</a>
         <div class="card-footer">
-            <button class="btn-small">สำหรับครูผู้ช่วย</button>
+            <button class="btn-small" onclick="teacherLogin()">สำหรับครูผู้ช่วย</button>
         </div>
     </div>
+    <script>
+function teacherLogin() {
+  const pw = prompt('กรุณาใส่รหัสผ่านค่ะ');
+  if (pw === null) return;
+  fetch('https://script.google.com/macros/s/AKfycbz5CsXD1vW2KQX2Fi-imRxb2nlXiwGKZbRIx7zduIbtioWbO7x7ASd_A1iF0r5e4e-4/exec', {
+    method: 'POST',
+    body: JSON.stringify({ action: 'login', password: pw })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      sessionStorage.setItem('isTeacher', 'true');
+      window.location.href = 'dashboard.html';
+    } else {
+      alert('รหัสผ่านไม่ถูกต้องค่ะ');
+    }
+  });
+}
+</script>
 </body>
 </html>
