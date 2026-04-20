@@ -18,7 +18,7 @@
             --border: #E5E7EB;
         }
         body {
-            font-family: 'Sarabun', sans-serif;
+            font-family: "Sarabun", sans-serif;
             min-height: 100vh;
             background: var(--primary-soft);
             display: flex;
@@ -47,7 +47,7 @@
         .btn {
             display: block; width: 100%; padding: 14px 20px;
             border-radius: 10px; border: none; font-size: 15px;
-            font-family: 'Sarabun', sans-serif; font-weight: 500;
+            font-family: "Sarabun", sans-serif; font-weight: 500;
             cursor: pointer; transition: all 0.15s ease;
             text-decoration: none; text-align: center;
         }
@@ -56,7 +56,7 @@
         .btn-committee:hover { background: #581C87; }
         .btn-small {
             background: none; border: none; color: var(--text-muted);
-            font-size: 13px; font-family: 'Sarabun', sans-serif;
+            font-size: 13px; font-family: "Sarabun", sans-serif;
             cursor: pointer; text-decoration: underline; padding: 4px 0;
         }
         .btn-small:hover { color: var(--primary); }
@@ -74,23 +74,26 @@
         </div>
     </div>
     <script>
-function teacherLogin() {
-  const pw = prompt('กรุณาใส่รหัสผ่านค่ะ');
-  if (pw === null) return;
-  fetch('https://script.google.com/macros/s/AKfycbz5CsXD1vW2KQX2Fi-imRxb2nlXiwGKZbRIx7zduIbtioWbO7x7ASd_A1iF0r5e4e-4/exec', {
-    method: 'POST',
-    body: JSON.stringify({ action: 'login', password: pw })
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (data.success) {
-      sessionStorage.setItem('isTeacher', 'true');
-      window.location.href = 'dashboard.html';
-    } else {
-      alert('รหัสผ่านไม่ถูกต้องค่ะ');
+    function teacherLogin() {
+        const pw = prompt("กรุณาใส่รหัสผ่านค่ะ");
+        if (pw === null) return;
+        fetch("https://script.google.com/macros/s/AKfycbz5CsXD1vW2KQX2Fi-imRxb2nlXiwGKZbRIx7zduIbtioWbO7x7ASd_A1iF0r5e4e-4/exec", {
+            method: "POST",
+            body: JSON.stringify({ action: "login", password: pw })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                sessionStorage.setItem("isTeacher", "true");
+                window.location.href = "dashboard.html";
+            } else {
+                alert("รหัสผ่านไม่ถูกต้องค่ะ");
+            }
+        })
+        .catch(() => {
+            alert("เกิดข้อผิดพลาด กรุณาลองใหม่ค่ะ");
+        });
     }
-  });
-}
-</script>
+    </script>
 </body>
 </html>
